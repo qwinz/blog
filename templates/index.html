@@ -13,13 +13,14 @@
         {% for blog in blog_all %}
             <li>
                     <p class="title" >
-                        <span class="layui-font-green">标题：{{ blog.blog.title }}</span>
-                        <a href="/blog_detail/{{blog.blog.id}}">查看详情</a>
+                        <span class="layui-font-green">标题：{{ blog.title }}</span>
+                        <a class="info layui-font-blue" href="/blog_detail/{{blog.id}}">查看详情</a>
                     </p>
-                    <div class="text">{{blog.blog.text | safe}}</div>
-                    <p class="info layui-font-blue">
-                        <span>时间：{{blog.blog.create_time.year}}-{{blog.blog.create_time.month}}-{{blog.blog.create_time.day}}</span>
-                        <span>创建人：{{blog.create_username}}</span>
+                    <div class="text">{{blog.text | safe}}</div>
+                    <p>
+                        <span>时间：{{blog.create_time.year}}-{{blog.create_time.month}}-{{blog.create_time.day}}</span>；
+                        <span class="layui-font-blue">分类：{{blog.category.name}}</span>；
+                        <span>创建人：{{blog.user.name}}</span>
                     </p>
             </li>
         {% endfor %}

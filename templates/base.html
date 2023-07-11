@@ -34,6 +34,10 @@
             <dl class="layui-nav-child">
                 <dd><a href="/blog/blog_list">我的博客</a></dd>
                 <dd><a href="/blog/myComment">我的评论</a></dd>
+                <!-- 只允许自己编辑分类 -->
+                {% if session['username']=='qwinz' %}
+                <dd><a href="/category">分类管理</a></dd>
+                {% endif %}
                 <dd><a href="/updatePwd">修改密码</a></dd>
                 <!-- <hr> -->
                 <dd><a href="/logout">退出</a></dd>

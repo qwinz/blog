@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, session, flash, url_for
 from model import db
-from model.models import User, Blog
+from model.models import User, Blog, Category
 
 blog = Blueprint('blog', __name__, url_prefix='/blog', template_folder='../templates', static_folder='../static', static_url_path='')
 
@@ -23,27 +23,31 @@ def get_blog_by_user(blog_id=None, is_all=False) -> blog:
 @blog.route('/write', methods=['POST', 'GET'])
 @blog.route('/write/<int:blog_id>', methods=['POST', 'GET'])
 def write_blog(blog_id=None):
+    category_all = Category.query.all()
     if request.method == 'GET':
         if blog_id:
             blog = get_blog_by_user(blog_id)
-            return render_template('write_blog.html', blog=blog)
+            return render_template('write_blog.html', blog=blog, category_all=category_all)
         else:
-            return render_template('write_blog.html')
+            return render_template('write_blog.html', category_all=category_all)
     if request.method == 'POST':
         recv_data = request.form
         title = recv_data.get("title")
         text = recv_data.get('editor')
+        category_name = recv_data.get('category_name')
         username = session.get('username')
         user = User.query.filter(User.username == username).first()
+        category = Category.query.filter(Category.name==category_name).first()
         if blog_id:
             blog = Blog.query.filter(Blog.id==blog_id, Blog.user_id==user.id).first()
             blog.title = title
             blog.text = text
-            db.session.commit()
+            blog.category_id = category.id if category else None
         else:
-            blog = Blog(title=title, text=text, user_id=user.id, active=0)
+            blog = Blog(title=title, text=text, user_id=user.id, active=0, category_id=category.id)
             db.session.add(blog)
-            db.session.commit()
+        db.session.commit()
+        db.session.close()
         return redirect(url_for('blog.blog_list'))
 
 @blog.route('/del_post/<int:blog_id>')
@@ -51,6 +55,7 @@ def del_post(blog_id):
     blog = get_blog_by_user(blog_id)
     db.session.delete(blog)
     db.session.commit()
+    db.session.close()
     return redirect(url_for('blog.blog_list'))
 
 # 展示博客列表
@@ -65,6 +70,7 @@ def blog_post(blog_id):
     blog = Blog.query.filter(Blog.id == blog_id).first()
     blog.active = True
     db.session.commit()
+    db.session.close()
     return redirect(url_for('blog.detail_blog', blog_id=blog_id))
     
 

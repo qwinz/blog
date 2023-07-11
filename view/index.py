@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from model.models import User, Blog
+from model.models import User, Blog, Category
 from model import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -12,14 +12,7 @@ def blog_index_red():
 @index.route('/index', endpoint='index')
 def blog_index():
     blog_all = Blog.query.filter(Blog.active==True).all()
-    blog_all_list = []
-    for blog in blog_all:
-        obj = {}
-        create_username = User.query.get(blog.user_id)
-        obj['blog'] = blog
-        obj['create_username'] = create_username.name
-        blog_all_list.append(obj)
-    return render_template('index.html', blog_all=blog_all_list)
+    return render_template('index.html', blog_all=blog_all)
 
 # 登录请求
 @index.route('/login', methods=['POST', 'GET'])
@@ -78,4 +71,25 @@ def logout():
 def updatePwd():
     return render_template('update_pwd.html')
 
-   
+@index.route('/category', methods=['GET', 'POST'])
+def category():
+    if session['username'] !='qwinz':
+        return redirect(url_for('/'))
+    if request.method == 'GET':
+        category_list = Category.query.all()
+        return render_template('category.html', category_list=category_list)
+    if request.method == 'POST':
+        category_name = request.form['category_name']
+        category = Category(name=category_name)
+        db.session.add(category)
+        db.session.commit()
+        db.session.close()
+        return redirect(url_for('index.category'))
+
+@index.route('/del_category/<int:category_id>')
+def del_category(category_id):
+    category = Category.query.get(category_id)
+    db.session.delete(category)
+    db.session.commit()
+    db.session.close()
+    return redirect(url_for('index.category'))

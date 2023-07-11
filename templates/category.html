@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block css %}
+<style>
+    .main {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .main form .layui-input-block {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .main form .layui-input-block input[name=category_name] {
+        width: 50%;
+    }
+
+    .main .categorm-items .categorm-item {
+        padding: 5px;
+        height: 3rem;
+        font-size: 1.5rem;
+        line-height: 3rem;
+        border-bottom: 1px solid #ccc;
+    }
+</style>
+{% endblock css %}
+{% block content %}
+<div class="main">
+
+    <div class="layui-panel">
+        <div style="padding: 32px;">
+            <form class="layui-form" action="category" method="post">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="category_name" required lay-verify="required" placeholder="分类名"
+                            class="layui-input">
+                        <button type="submit" class="layui-btn">添加分类</button>
+                    </div>
+                </div>
+            </form>
+            <ul class="categorm-items" style="padding: 32px;">
+                <li class="layui-font-green">现有分类</li>
+                {% for category in category_list %}
+                <li class="categorm-item" style="display: flex; justify-content: space-between;">
+                    {{category.name}}
+                    <a href="del_category/{{category.id}}" class="layui-btn layui-btn-danger">删除</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -5,6 +5,18 @@
 {% endblock %}
 
 {% block css %}
+<style>
+    .main form label{
+        text-align: left;
+    }
+    .main input[name=title]{
+        width: 50%;
+    }
+    .main form label+div.layui-input-block{
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
 {% endblock %}
 {% block js %}
 <script src="{{ url_for('index.static', filename='js/tinymce/tinymce.min.js') }}"></script>
@@ -16,11 +28,27 @@
     {% if blog %}
     <form class="layui-form" action="/blog/write/{{blog.id}}" method="post">
         <div class="layui-form-item" style=" margin-top: 50px;">
-            <label class="layui-form-label" style="text-align: left;" autocomplete=false>标 题</label>
+            <label class="layui-form-label" autocomplete="off">标 题</label>
             <div class="layui-input-block ">
-
                 <input type="text" value="{{blog.title}}" name="title" lay-verify="required" placeholder="请输入标题"
                     class="layui-input">
+                    <div class="layui-row">
+                        <div class="layui-input-wrap">
+                          <div class="layui-input-prefix">
+                            <i class="layui-icon layui-icon-form"></i>
+                          </div>
+                          <select name="category_name">
+                            <option value="">选择分类</option>
+                            {% for category in category_all %}
+                                {% if category.name == blog.category.name %}
+                                <option value="{{category.name}}" selected >{{category.name}}</option>
+                                {% else %}
+                                <option value="{{category.name}}" >{{category.name}}</option>
+                                {% endif %}
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
             </div>
         </div>
         <div id="editor">
@@ -36,9 +64,23 @@
     {% else %}
     <form class="layui-form" action="/blog/write" method="post">
         <div class="layui-form-item" style=" margin-top: 50px;">
-            <label class="layui-form-label" style="text-align: left;" autocomplete=false>标 题</label>
+            <label class="layui-form-label" autocomplete="off">标 题</label>
+            
             <div class="layui-input-block ">
                 <input type="text" name="title" lay-verify="required" placeholder="请输入标题" class="layui-input">
+                <div class="layui-row">
+                    <div class="layui-input-wrap">
+                      <div class="layui-input-prefix">
+                        <i class="layui-icon layui-icon-form"></i>
+                      </div>
+                      <select>
+                        <option value="">选择分类</option>
+                        {% for category in category_all %}
+                            <option value="{{category.name}}">{{category.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
             </div>
         </div>
         <div id="editor">
