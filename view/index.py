@@ -11,8 +11,15 @@ def blog_index_red():
 
 @index.route('/index', endpoint='index')
 def blog_index():
-    blog_all = Blog.query.all()
-    return render_template('index.html', all_blog=blog_all)
+    blog_all = Blog.query.filter(Blog.active==True).all()
+    blog_all_list = []
+    for blog in blog_all:
+        obj = {}
+        create_username = User.query.get(blog.user_id)
+        obj['blog'] = blog
+        obj['create_username'] = create_username.name
+        blog_all_list.append(obj)
+    return render_template('index.html', blog_all=blog_all_list)
 
 # 登录请求
 @index.route('/login', methods=['POST', 'GET'])

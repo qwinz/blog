@@ -1,0 +1,29 @@
+.main ul.blog-all{
+}
+.main ul.blog-all li{
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+.main ul.blog-all .title{
+    display: flex;
+    justify-content: space-between;
+}
+.main ul.blog-all .title span{
+    font-size: 1.5rem;
+
+}
+.main ul.blog-all .text{
+    margin: 10px 0;
+    max-height: 100px;
+    display: -webkit-box; /* 使用弹性盒子布局 */
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5; /* 设置最大显示行数为2 */
+    overflow: hidden;
+    text-overflow: ellipsis; /* 使用省略号表示溢出的文本 */
+}
+.main ul.blog-all .info{
+    display: flex;
+    justify-content: space-between;
+}

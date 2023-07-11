@@ -24,7 +24,7 @@
                         {{blog.text | safe}}
                     </div>
                     <p>
-                        <span>发布人：{{ blog.user.name }} &nbsp;&nbsp;&nbsp;&nbsp;创建时间：{{ blog.create_time }}</span>
+                        <span>创建人：{{ blog.user.name }} &nbsp;&nbsp;&nbsp;&nbsp;创建时间：{{ blog.create_time }}</span>
                         {% if blog.active %}
                         <span><span class="layui-badge-dot layui-bg-green" style="margin-right: 5px;"></span>已发布</span>
                         

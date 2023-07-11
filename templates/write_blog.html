@@ -58,11 +58,11 @@
     let form = document.querySelector('.layui-form')
     let submit_btn = document.querySelector('.submit_btn')
     function get_content(is_active) {
-        if (form.title.value.replace(/\s+/g, '') != '' && form.title.value.replace(/\s+/g, '') != '') {
+        if (form.title.value.replace(/\s+/g, '') != '' && tinymce.activeEditor.getContent().length>=100) {
             form.submit()
         }
         else {
-            alert('请填写相关内容')
+            alert('字数不能少于100')
         }
 
     }

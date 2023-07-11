@@ -17,8 +17,7 @@
     align-items: flex-end;
 }
 .main ul li .text {
-    margin: 10px 0;
-    max-height: 100px;
+    max-height: 60px;
     display: -webkit-box; /* 使用弹性盒子布局 */
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2; /* 设置最大显示行数为2 */

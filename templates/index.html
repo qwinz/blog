@@ -3,12 +3,25 @@
 {% block title %}
     在线博客平台
 {% endblock title %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('index.static', filename='css/index.css') }}">
+{% endblock css %}
 
 {% block content %}
 <div class="main">
     <ul class="blog-all">
         {% for blog in blog_all %}
-            
+            <li>
+                    <p class="title" >
+                        <span class="layui-font-green">标题：{{ blog.blog.title }}</span>
+                        <a href="/blog_detail/{{blog.blog.id}}">查看详情</a>
+                    </p>
+                    <div class="text">{{blog.blog.text | safe}}</div>
+                    <p class="info layui-font-blue">
+                        <span>时间：{{blog.blog.create_time.year}}-{{blog.blog.create_time.month}}-{{blog.blog.create_time.day}}</span>
+                        <span>创建人：{{blog.create_username}}</span>
+                    </p>
+            </li>
         {% endfor %}
     </ul>
 </div>
