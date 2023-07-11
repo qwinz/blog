@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    在线博客平台.注册
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('index.static', filename='css/login.css') }}">
+{% endblock css%}
+
+{% block content %}
+    <div class="register">
+        <h1>注册</h1>
+        <form class="layui-form" action="register" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" required  lay-verify="required" placeholder="请输入用户名" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密  码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">确认密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="password_confirm" required lay-verify="required" placeholder="请输入密码" class="layui-input">
+                </div>
+            </div>
+            <p class="tip" style="text-align: center;color: red;">
+                {% for item in get_flashed_messages() %}
+                {{ item }}
+                {% endfor %}
+            </p>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">注册</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

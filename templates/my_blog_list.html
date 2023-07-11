@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    在线博客平台.博客
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('index.static', filename='css/blog_list.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="main">
+        <ul>
+            {% if not blog_list %}
+                <h1 style="text-align: center; margin-top: 50px;" >
+                    还没有博客
+                    <a href="/blog/write" class="layui-font-green">写博客</a>
+                </h1>
+            {% endif %}
+            {% for blog in blog_list %}
+                <li>
+                    <a  class="layui-font-green title" title="点击查看详情" href="/blog/showBlog/{{ blog.id }}" blog-id="{{blog.id}}" >{{ blog.title }}</a>
+                    <div class="text">
+                        {{blog.text | safe}}
+                    </div>
+                    <p>
+                        <span>发布人：{{ blog.user.name }} &nbsp;&nbsp;&nbsp;&nbsp;创建时间：{{ blog.create_time }}</span>
+                        {% if blog.active %}
+                        <span><span class="layui-badge-dot layui-bg-green" style="margin-right: 5px;"></span>已发布</span>
+                        
+                        {% else %}
+                        <span><span class="layui-badge-dot layui-bg-orange" style="margin-right: 5px;"></span>未发布</span>
+                            
+                        {% endif %}
+                        <span>
+                            <a href="/blog/blog_edit/{{ blog.id }}" class="layui-btn">编辑</a>
+                            <a href="/blog/blog_post/{{ blog.id }}" class="layui-btn layui-btn-normal">发布</a>
+                            <a href="/blog/del_post/{{ blog.id }}" class="layui-btn layui-btn-danger">删除</a>
+                        </span>
+                    </p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+<script>
+    let text = document.querySelector('.main .text')
+    text.innerHTML
+</script>

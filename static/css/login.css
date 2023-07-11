@@ -1,0 +1,13 @@
+.register{
+    min-width: 300px;
+    margin: 0 auto;
+}
+.register h1{
+    text-align: center;
+    margin: 10px;
+}
+.register form{
+    width: 50%;
+    min-width: 300px;
+    margin: 0 auto;
+}

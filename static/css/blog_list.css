@@ -1,0 +1,31 @@
+.main{
+    background-color: #fff;
+}
+.main ul li{
+    /* height: 50px; */
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+}
+.main ul li>a{
+    display: block;
+    /* padding: 5px 0px; */
+    font-size: 1.5rem;
+}
+.main ul li p{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.main ul li .text {
+    margin: 10px 0;
+    max-height: 100px;
+    display: -webkit-box; /* 使用弹性盒子布局 */
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* 设置最大显示行数为2 */
+    overflow: hidden;
+    text-overflow: ellipsis; /* 使用省略号表示溢出的文本 */
+}
+.main ul li p span a{
+    border-radius: 3px;
+    margin-right: 20px;
+} 

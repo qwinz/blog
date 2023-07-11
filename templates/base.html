@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+        {# 其他页面可以重写标题 #}
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" href="{{ url_for('index.static', filename='css/layui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('index.static', filename='css/base.css') }}">
+    {% block css %}
+    {% endblock css %}
+    <script src="{{ url_for('index.static', filename='js/layui.js') }}"></script>
+    {% block js %}
+    {% endblock js %}
+</head>
+
+<body>
+    <div id="bg"></div>
+    <ul class="layui-nav" lay-filter="" style="display: flex;justify-content: space-between;" >
+        <div>
+            <li class="layui-nav-item"><a href="/">在线博客平台</a></li>
+            <li class="layui-nav-item"><a href="/blog/blogAll">博客</a></li>
+            <li class="layui-nav-item"><a href="/about">关于</a></li>
+        </div>
+        <div style="margin-right: 7px;" >
+            {% if session['username'] %}
+        <li class="layui-nav-item" lay-unselect style="float: right;">
+            <a href="javascript:;">
+                <img src="https://unpkg.com/outeres@0.0.10/demo/avatar/1.jpg" class="layui-nav-img">
+            </a>
+            <dl class="layui-nav-child">
+                <dd><a href="/blog/blog_list">我的博客</a></dd>
+                <dd><a href="/blog/myComment">我的评论</a></dd>
+                <dd><a href="/updatePwd">修改密码</a></dd>
+                <!-- <hr> -->
+                <dd><a href="/logout">退出</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item" style="float: right"><a href="/blog/write">写博客</a></li>
+        {% else %}
+        <li class="layui-nav-item" style="float: right"><a href="/register">注册</a></li>
+        <li class="layui-nav-item" style="float: right"><a href="/login">登录</a></li>
+        {% endif %}
+        </div>
+    </ul>
+
+    <div class="content" >
+        {% block content %}
+        {# 其他页面内容 #}
+        {% endblock %}
+    </div>
+
+
+</body>
+
+</html>

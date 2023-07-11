@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}
+在线博客平台.写博客
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+{% block js %}
+<script src="{{ url_for('index.static', filename='js/tinymce/tinymce.min.js') }}"></script>
+<script src="{{ url_for('index.static', filename='js/tinymce/zh_CN.js') }}"></script>
+<script src="{{ url_for('index.static', filename='js/axios.min.js') }}"></script>
+{% endblock js %}
+{% block content %}
+<div class="main">
+    {% if blog %}
+    <form class="layui-form" action="/blog/write/{{blog.id}}" method="post">
+        <div class="layui-form-item" style=" margin-top: 50px;">
+            <label class="layui-form-label" style="text-align: left;" autocomplete=false>标 题</label>
+            <div class="layui-input-block ">
+
+                <input type="text" value="{{blog.title}}" name="title" lay-verify="required" placeholder="请输入标题"
+                    class="layui-input">
+            </div>
+        </div>
+        <div id="editor">
+            {{ blog.text | safe }}
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="text-align: right;">
+                <button type="button" class="layui-btn submit_btn"
+                    style="width: 150px; margin-top: 30px;">保存</button>
+            </div>
+        </div>
+    </form>
+    {% else %}
+    <form class="layui-form" action="/blog/write" method="post">
+        <div class="layui-form-item" style=" margin-top: 50px;">
+            <label class="layui-form-label" style="text-align: left;" autocomplete=false>标 题</label>
+            <div class="layui-input-block ">
+                <input type="text" name="title" lay-verify="required" placeholder="请输入标题" class="layui-input">
+            </div>
+        </div>
+        <div id="editor">
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="text-align: right;">
+                <button type="button" class="layui-btn submit_btn"
+                    style="width: 150px; margin-top: 30px;">保存</button>
+            </div>
+        </div>
+    </form>
+    {% endif %}
+
+</div>
+
+<script type="text/javascript">
+    let form = document.querySelector('.layui-form')
+    let submit_btn = document.querySelector('.submit_btn')
+    function get_content(is_active) {
+        if (form.title.value.replace(/\s+/g, '') != '' && form.title.value.replace(/\s+/g, '') != '') {
+            form.submit()
+        }
+        else {
+            alert('请填写相关内容')
+        }
+
+    }
+    submit_btn.onclick = () => {
+        get_content(is_save = 1)
+    }
+    tinymce.init({
+        selector: '#editor',
+        language: 'zh_CN',
+        branding: false,
+        plugins: "codesample hr link",
+        toolbar: 'codesample hr link undo redo restoredraft | cut copy paste pastetext | forecolor backcolor bold italic underline strikethrough | alignleft aligncenter alignright alignjustify outdent indent | \
+    styleselect formatselect fontselect fontsizeselect | bullist numlist | blockquote subscript superscript removeformat | \
+    table image media charmap emoticons  pagebreak insertdatetime print  lineheight',
+        toolbar_sticky: true,
+        promotion: false,
+    });
+
+</script>
+{% endblock %}
