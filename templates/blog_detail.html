@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{blog.title}}
+{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('index.static', filename='css/blog_detail.css') }}">
+{% endblock css %}
+{% block content %}
+<div class="layui-panel">
+    <div class="article">
+        <h1>{{blog.title}}</h1>
+        <span class="layui-font-14">
+            日期：{{blog.create_time.year}}-{{blog.create_time.month}}-{{blog.create_time.day}} &nbsp;
+            作者：{{ blog.user.name }}
+        </span>
+        <div class="text">
+            {{blog.text|safe}}
+        </div>
+    </div>
+</div>
+<div class="comment">
+    <form action="/blog/comment/{{blog.id}}" method="post">
+        <div class="panel"></div>
+        <input name="uuid" type="text" style="display: none;" value="{{session['uuid']}}">
+        <button type="submit" class="layui-btn">提交评论</button>
+        <span style="color: red;">
+            {% for item in get_flashed_messages() %}
+            {{ item }}
+            {% endfor %}
+        </span>
+    </form>
+    <div class="comment-list">
+        <div class="layui-bg-gray" style="padding: 16px;">
+            <div class="layui-row layui-col-space15">
+                {% if not comments %}
+                    暂无评论
+                {% endif %}
+                {% for comment in comments %}
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            {% if comment.user %}
+                            {{comment.user.name}}
+                            {% else %}
+                            用户{{comment.uuid.split("-")[0]}}
+                            {% endif %}
+                        </div>
+                        <div class="layui-card-body">
+                            {{comment.text|safe}}
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    tinymce.init({
+        selector: '.comment .panel',
+        language: 'zh_CN',
+        branding: false,
+        height: '150px',
+        menubar: '',
+        plugins: "",
+        toolbar: "forecolor backcolor bold italic underline strikethrough",
+        toolbar_sticky: true,
+        promotion: false,
+    });
+</script>
+{% endblock content %}

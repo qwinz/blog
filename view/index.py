@@ -1,9 +1,16 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, g
 from model.models import User, Blog, Category
 from model import db
 from werkzeug.security import generate_password_hash, check_password_hash
+import uuid
 
 index = Blueprint('index', __name__, template_folder='../templates', static_folder='../static', static_url_path='')
+
+@index.route('/generate_uuid')
+def generate_uuid():
+    # 生成UUID
+    user_uuid = str(uuid.uuid4())
+    return user_uuid
 
 @index.route('/')
 def blog_index_red():
@@ -11,7 +18,8 @@ def blog_index_red():
 
 @index.route('/index', endpoint='index')
 def blog_index():
-    blog_all = Blog.query.filter(Blog.active==True).all()
+    session['uuid'] = generate_uuid()
+    blog_all = Blog.query.filter(Blog.active==True).order_by(Blog.create_time.desc()).all()
     return render_template('index.html', blog_all=blog_all)
 
 # 登录请求
@@ -28,7 +36,8 @@ def login():
             return redirect(url_for('index.login'))
         if user.check_password(user.password, password):
             session.clear()
-            session['username'] = user.username
+            g.user = user
+            session['user_id'] = user.id
             session.permanent = True
             return redirect(url_for('index.index'))
         else:
@@ -43,9 +52,9 @@ def register():
         username = request.form.get('username')
         password = request.form.get('password')
         password_confirm = request.form.get('password_confirm')
-        sql_username = User.query.filter_by(username=username).first()
-        if username == sql_username:
-            flash('改用户名已被注册')
+        user = User.query.filter_by(username=username).first()
+        if user and username == user.username:
+            flash('用户名已被注册')
             return redirect(url_for('index.register'))
         if password != password_confirm:
             flash('两次密码不一致')
@@ -58,13 +67,15 @@ def register():
         db.session.commit()
         db.session.close()
         session.clear()
-        session['username'] = username
+        g.user = new_user
+        session['user_id'] = new_user.id
         session.permanent = True
         return redirect(url_for('index.index'))
 
 @index.route('/logout')
 def logout():
     session.clear()
+    g.user = None
     return redirect(url_for('index.index'))
  
 @index.route('/updatePwd')
@@ -73,8 +84,9 @@ def updatePwd():
 
 @index.route('/category', methods=['GET', 'POST'])
 def category():
-    if session['username'] !='qwinz':
-        return redirect(url_for('/'))
+    user = User.query.get(session['user_id'])
+    if user.username !='qwinz':
+        return redirect('/')
     if request.method == 'GET':
         category_list = Category.query.all()
         return render_template('category.html', category_list=category_list)

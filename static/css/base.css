@@ -1,7 +1,26 @@
+:root{
+    --bg-color:#fbf6e3;
+    --bg-color-header: #123531;
+}
+body{
+    background-color: var(--bg-color);
+}
+.layui-panel{
+    padding: 30px;
+}
 .content{
     width: 80%; 
     margin: 0 auto;
 }
-body{
-    background-color: rgb(219, 219, 219);
+.layui-nav{
+    background-color: var(--bg-color-header);
+}
+pre{
+    padding: 2px 0 0 10px ;
+    border-left: 1px solid #ccc;
+}
+blockquote{
+    padding-left: 10px;
+    margin-bottom: 10px;
+    border-left: 2px solid rgb(118, 192, 43);
 }

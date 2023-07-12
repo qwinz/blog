@@ -38,7 +38,8 @@ class Blog(Base):
 class Comment(Base):
     __tablename__ = 'comment'
     text = db.Column(db.String(256))    # 评论内容
-    # 关联博客id
+    uuid = db.Column(db.String(256))    #用户未登录时的评论
+    # 关联文章id
     blog_id = db.Column(db.Integer, db.ForeignKey("blog.id"))
     # 关联用户id
     user_id = db.Column(db.Integer, db.ForeignKey("tb_user.id"))

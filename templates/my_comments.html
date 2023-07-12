@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+我的评论
+{% endblock title %}
+{% block css %}
+{% endblock css %}
+{% block content %}
+
+<!-- <div class="layui-bg-gray" style="padding: 16px;"> -->
+<div class="layui-bg-gray" style="padding: 16px;">
+    <div class="layui-row layui-col-space15">
+        {% if not comments %}
+            <h1 style="text-align: center;">暂无评论</h1>
+        {% endif %}
+        {% for comment in comments %}
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    文章：<a class="layui-font-green" href="/blog/blog_detail/{{comment.blog.id}}">{{comment.blog.title}}</a>
+                </div>
+                <div class="layui-card-body" style="max-height: 2.5rem;overflow: hidden;" >
+                    {{comment.text|safe}}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- </div> -->
+{% endblock content %}

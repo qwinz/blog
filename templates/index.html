@@ -1,28 +1,28 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    在线博客平台
+首页
 {% endblock title %}
 {% block css %}
-    <link rel="stylesheet" href="{{ url_for('index.static', filename='css/index.css') }}">
+<link rel="stylesheet" href="{{ url_for('index.static', filename='css/index.css') }}">
 {% endblock css %}
 
 {% block content %}
 <div class="main">
     <ul class="blog-all">
         {% for blog in blog_all %}
-            <li>
-                    <p class="title" >
-                        <span class="layui-font-green">标题：{{ blog.title }}</span>
-                        <a class="info layui-font-blue" href="/blog_detail/{{blog.id}}">查看详情</a>
-                    </p>
-                    <div class="text">{{blog.text | safe}}</div>
-                    <p>
-                        <span>时间：{{blog.create_time.year}}-{{blog.create_time.month}}-{{blog.create_time.day}}</span>；
-                        <span class="layui-font-blue">分类：{{blog.category.name}}</span>；
-                        <span>创建人：{{blog.user.name}}</span>
-                    </p>
-            </li>
+        <li>
+            <p class="title">
+                <span class="layui-font-green">标题：{{ blog.title }}</span>
+                <a class="info layui-font-blue" href="/blog/blog_detail/{{blog.id}}">查看详情</a>
+            </p>
+            <div class="text">{{blog.text | safe}}</div>
+            <p>
+                <span>日期：{{blog.create_time.year}}-{{blog.create_time.month}}-{{blog.create_time.day}}</span>；
+                <span class="layui-font-blue">分类：{{blog.category.name}}</span>；
+                <span>创建人：{{blog.user.name}}</span>
+            </p>
+        </li>
         {% endfor %}
     </ul>
 </div>
