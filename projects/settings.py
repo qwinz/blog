@@ -1,3 +1,4 @@
+from os import path
 SECRET_KEY = 'SDJKFKLASDJFKLSJADFKL'
 DB_HOST = ''
 DB_PORT = 3306
@@ -5,6 +6,8 @@ DB_NAME = ''
 DB_USER = ''
 DB_PWD  = ''
 TEMPLATES_AUTO_RELOAD = True
+# 图片存储路径
+STATIC_IMAGE_PATH = path.join(path.join(path.dirname(path.dirname(path.abspath(__name__))), 'static'), 'images')
 try:
     from projects.local_settings import *
 except ImportError:

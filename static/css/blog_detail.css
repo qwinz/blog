@@ -1,5 +1,5 @@
 .layui-panel .article h1,
-.layui-panel .article span{
+.layui-panel .article>span{
     display: block;
     text-align: center;
     margin-bottom: 10px;

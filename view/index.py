@@ -1,11 +1,20 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session, g
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, g, current_app
 from model.models import User, Blog, Category
 from model import db
 from werkzeug.security import generate_password_hash, check_password_hash
-import uuid
+import uuid, os
 
 index = Blueprint('index', __name__, template_folder='../templates', static_folder='../static', static_url_path='')
 
+def set_session(user):
+    session['user_id'] = user.id
+    session['user_permission'] = user.permission
+    session['user_username'] = user.username
+    session['user_name'] = user.name
+    # 转义图片路径，可能Linux中有所不同
+    session['user_avator_path'] = user.avator
+    session.permanent = True
+    
 @index.route('/generate_uuid')
 def generate_uuid():
     # 生成UUID
@@ -17,14 +26,20 @@ def blog_index_red():
     return redirect(url_for('index.index'))
 
 @index.route('/index', endpoint='index')
-def blog_index():
-    session['uuid'] = generate_uuid()
-    blog_all = Blog.query.filter(Blog.active==True).order_by(Blog.create_time.desc()).all()
-    return render_template('index.html', blog_all=blog_all)
+@index.route('/index/<int:category_id>', endpoint='index')
+def blog_index(category_id=None):
+    if session.get('uuid') is None: session['uuid'] = generate_uuid()
+    if category_id is None :
+        blog_list = Blog.query.filter(Blog.active==True).order_by(Blog.create_time.desc()).all()
+    else:
+        blog_list = Blog.query.filter(Blog.category_id==category_id).all()
+    return render_template('index.html', blog_list=blog_list)
 
 # 登录请求
 @index.route('/login', methods=['POST', 'GET'])
 def login():
+    if session.get('user_id') is not None:
+        return redirect('/')
     if request.method == 'GET':
         return render_template('login.html')
     if request.method == 'POST':
@@ -37,8 +52,7 @@ def login():
         if user.check_password(user.password, password):
             session.clear()
             g.user = user
-            session['user_id'] = user.id
-            session.permanent = True
+            set_session(user)
             return redirect(url_for('index.index'))
         else:
             flash('密码错误')
@@ -46,6 +60,8 @@ def login():
 
 @index.route('/register', methods=['POST', 'GET'])
 def register():
+    if session.get('user_id') is not None:
+        return redirect('/')
     if request.method == 'GET':
         return render_template('register.html')
     if request.method == 'POST':
@@ -67,9 +83,8 @@ def register():
         db.session.commit()
         db.session.close()
         session.clear()
+        set_session(new_user)
         g.user = new_user
-        session['user_id'] = new_user.id
-        session.permanent = True
         return redirect(url_for('index.index'))
 
 @index.route('/logout')
@@ -85,7 +100,7 @@ def updatePwd():
 @index.route('/category', methods=['GET', 'POST'])
 def category():
     user = User.query.get(session['user_id'])
-    if user.username !='qwinz':
+    if user.permission > 1:
         return redirect('/')
     if request.method == 'GET':
         category_list = Category.query.all()
@@ -105,3 +120,62 @@ def del_category(category_id):
     db.session.commit()
     db.session.close()
     return redirect(url_for('index.category'))
+
+@index.route('/category_list')
+def category_list():
+    category_list = Category.query.all()
+    blog_list = Blog.query.all()
+    return render_template('category_list.html', blog_list=blog_list, category_list=category_list)
+    
+
+@index.route('/user_info', methods=['GET', 'POST'])
+def user_info():
+    if request.method == 'GET':
+        return render_template('user_info.html')
+    if request.method == 'POST':
+        base_img_path = current_app.config['STATIC_IMAGE_PATH']
+        img_fold_name = 'avator'
+        avator_img_folder_path = os.path.join(base_img_path, img_fold_name)
+        user = User.query.get(session['user_id'])
+        new_name = request.form.get('name')
+        avator_file = request.files.get('file')
+        if not os.path.exists(avator_img_folder_path):
+            os.mkdir(avator_img_folder_path)
+        if new_name is not None: new_name = new_name.strip()
+        if new_name and (len(new_name) <= 1 or len(new_name) > 10):
+            flash('用户名长度:2-10', 'user_info')
+            return redirect(request.url)
+        if avator_file:
+            avator_file_name = f"{user.username}-avator{os.path.splitext(avator_file.filename)[-1]}"
+            avator_file_path = os.path.join(avator_img_folder_path, avator_file_name)
+            avator_file.save(avator_file_path)
+            user.avator = f'/{img_fold_name}/{avator_file_name}'
+            db.session.commit()
+            session['user_avator_path'] = user.avator
+            db.session.close()
+            return {'status': 200}
+        if new_name is not None:
+            user.name = new_name
+            db.session.commit()
+            session['user_name'] = user.name
+            db.session.close()
+            return redirect(request.url)
+            
+@index.route('/password', methods=['POST'])
+def password():
+    old_pwd = request.form.get('old_pwd').strip()
+    new_pwd = request.form.get('new_pwd').strip()
+    user = User.query.get(session['user_id'])
+    if not old_pwd or not new_pwd:
+        flash('数据不合格', 'password')
+        return redirect(request.referrer)
+    if user.check_password(user.password, old_pwd):
+        user.password = new_pwd
+        user.set_password_hash()
+        db.session.commit()
+        db.session.close()
+    else:
+        flash('旧密码错误', 'password')
+    return redirect(request.referrer)
+
+        

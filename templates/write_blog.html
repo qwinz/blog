@@ -63,7 +63,6 @@
     <form class="layui-form" action="/blog/write" method="post">
         <div class="layui-form-item" style=" margin-top: 50px;">
             <label class="layui-form-label" autocomplete="off">标 题</label>
-
             <div class="layui-input-block ">
                 <input type="text" name="title" lay-verify="required" placeholder="请输入标题" class="layui-input">
                 <div class="layui-row">
@@ -96,12 +95,14 @@
 <script type="text/javascript">
     let form = document.querySelector('.layui-form')
     let submit_btn = document.querySelector('.submit_btn')
+    let title = document.querySelector('input[name=title]')
     function get_content(is_active) {
-        if (form.title.value.replace(/\s+/g, '') != '' && tinymce.activeEditor.getContent().length >= 100) {
+        console.log(title)
+        if (title.value.replace(/\s+/g, '') != '' && tinymce.activeEditor.getContent().length >= 100) {
             form.submit()
         }
         else {
-            alert('字数不能少于100')
+            alert('请填写标题且正文字数不能少于100')
         }
     }
     submit_btn.onclick = () => {
@@ -111,9 +112,10 @@
         selector: '#editor',
         language: 'zh_CN',
         branding: false,
-        plugins: "codesample link fontselect fontsizeselect",
-        toolbar: 'codesample link undo redo blockquote subscript superscript removeformat  | forecolor backcolor bold italic underline strikethrough | alignleft aligncenter alignright alignjustify outdent indent | \
-    styleselect formatselect fontselect fontsizeselect | print  lineheight',
+        plugins: 'searchreplace fullscreen image link media template code codesample table charmap pagebreak anchor insertdatetime advlist lists wordcount help autosave  autoresize ',
+    toolbar: 'searchreplace code template undo codesample restoredraft | forecolor backcolor bold link anchor lineheight fullscreen |\
+    styleselect formatselect fontselect fontsizeselect | bullist numlist | blockquote subscript superscript removeformat \
+    image media charmap hr pagebreak insertdatetime',
         toolbar_sticky: true,
         promotion: false,
     });

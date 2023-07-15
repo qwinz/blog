@@ -1,6 +1,6 @@
 :root{
-    --bg-color:#fbf6e3;
-    --bg-color-header: #123531;
+    --bg-color:#ecf3e5;
+    --bg-color-header: #023725;
 }
 body{
     background-color: var(--bg-color);
@@ -12,12 +12,23 @@ body{
     width: 80%; 
     margin: 0 auto;
 }
+@media (max-width:800px) {
+    .content{
+        width: 100%; 
+    }
+}
 .layui-nav{
     background-color: var(--bg-color-header);
 }
 pre{
     padding: 2px 0 0 10px ;
     border-left: 1px solid #ccc;
+    background-color: #fbfbfd;
+}
+pre code{
+    display: block;
+    max-height: 500px;
+    overflow: scroll;
 }
 blockquote{
     padding-left: 10px;

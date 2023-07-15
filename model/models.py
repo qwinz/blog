@@ -9,7 +9,7 @@ class User(Base):
     password = db.Column(db.String(256), nullable=True)
     name = db.Column(db.String(64))
     permission = db.Column(db.Integer, default=3)
-    avator = db.Column(db.LargeBinary)
+    avator = db.Column(db.String(256))
 
 
     def __init__(self, username, password, name):

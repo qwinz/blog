@@ -18,14 +18,13 @@
 }
 .main ul li .text {
     margin-top: 20px;
-    max-height: 40px;
+    max-height: 2.25rem;
     display: -webkit-box; /* 使用弹性盒子布局 */
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1; /* 设置最大显示行数为2 */
+    -webkit-line-clamp: 2; /* 设置最大显示行数为2 */
     overflow: hidden;
     text-overflow: ellipsis; /* 使用省略号表示溢出的文本 */
 }
-.main ul li p span a{
-    border-radius: 3px;
-    margin-right: 20px;
+.main ul li p .btn-list {
+    display: flex;
 } 

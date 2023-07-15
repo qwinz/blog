@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}
+所有分类
+{% endblock title %}
+{% block content %}
+<div class="main">
+    <div class="layui-bg-gray" style="padding: 16px;">
+        <div class="layui-row layui-col-space15">
+            {% for category in category_list %}
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header"><a class="layui-font-green" href="index/{{category.id}}">{{category.name}}</a></div>
+                    <div class="layui-card-body" style="text-overflow: ellipsis;white-space: nowrap;max-height:3em;overflow: hidden;" >
+                        {% for blog in blog_list %}
+                            {% if blog.category.id == category.id %}
+                                <p>{{blog.title}}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                        <p style="margin-left: 20px;">...</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

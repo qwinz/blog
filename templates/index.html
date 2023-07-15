@@ -10,11 +10,16 @@
 {% block content %}
 <div class="main">
     <ul class="blog-all">
-        {% for blog in blog_all %}
+        {% if blog_list_by_category %}
+            
+        {% endif %}
+        {% for blog in blog_list %}
         <li>
             <p class="title">
-                <span class="layui-font-green">标题：{{ blog.title }}</span>
-                <a class="info layui-font-blue" href="/blog/blog_detail/{{blog.id}}">查看详情</a>
+                <span>
+                    <a  class="layui-font-green" href="/blog/blog_detail/{{blog.id}}">标题：{{ blog.title }}</a>
+                </span>
+                <a class="info layui-font-green" href="/blog/blog_detail/{{blog.id}}">查看详情</a>
             </p>
             <div class="text">{{blog.text | safe}}</div>
             <p>
