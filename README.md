@@ -9,7 +9,7 @@
     DB_NAME = 'xx'
     DB_USER = 'xx'
     DB_PWD  = 'xx'
-    #哈希加密后的后台管理密码，访问/admin可以进入用户管理界面，处理逻辑在projects中的init文件
+    #werkzeug.security.generate_password_hash加密后的后台管理密码，访问/admin可以进入用户管理界面，处理逻辑在projects中的init文件
     MASTER_PASSWORD = 'pbkdf2:sha256:600000$t0T......'
     #图片存储路径，此处为static/images
     STATIC_IMAGE_PATH = path.join(path.join(path.dirname(path.dirname(path.abspath(__file__))), 'static'), 'images')
@@ -24,6 +24,16 @@
 - `view`：视图函数，路由逻辑处理
 - `app.py`：入口文件
 ## 预览
+主页
 ![image](https://github.com/qwinz/blog/assets/72587888/b3c74566-49b4-42c7-85d0-17bb4a42cceb)
+后台
 ![image](https://github.com/qwinz/blog/assets/72587888/9f2c21a7-5928-4515-b9a5-2c093a788ff8)
+搜索
+![image](https://github.com/qwinz/blog/assets/72587888/3bfd06aa-cb88-4ee6-aa8b-11c1c243842a)
+正文
+![image](https://github.com/qwinz/blog/assets/72587888/01e076be-e2f7-4e8d-a476-6a9927fee898)
+评论
+![image](https://github.com/qwinz/blog/assets/72587888/c8a1c668-a514-41da-ba1b-b7fd3906e06e)
+评论汇总
+![image](https://github.com/qwinz/blog/assets/72587888/73dc0f71-c7ce-46bb-8ff6-a1a9a612d861)
 
