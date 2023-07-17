@@ -24,7 +24,7 @@
             <div class="text">{{blog.text | safe}}</div>
             <p>
                 <span>日期：{{blog.create_time.year}}-{{blog.create_time.month}}-{{blog.create_time.day}}</span>；
-                <span class="layui-font-blue">分类：{{blog.category.name}}</span>；
+                <span>分类：<a  class="layui-font-blue" href="/index/{{blog.category.id}}">{{blog.category.name}}</a></span>；
                 <span>创建人：{{blog.user.name}}</span>
             </p>
         </li>

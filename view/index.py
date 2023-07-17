@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from model.models import User, Blog, Category
 from model import db
 from werkzeug.security import generate_password_hash, check_password_hash
-import uuid, os
+import uuid, os, re
 
 index = Blueprint('index', __name__, template_folder='../templates', static_folder='../static', static_url_path='')
 
@@ -181,4 +181,21 @@ def password():
         flash('旧密码错误', 'password')
     return redirect(request.referrer)
 
-        
+@index.route('/search', methods=['POST'])
+def search():
+    if request.method == 'POST':
+        keyword = request.form.get('keyword')
+        if not keyword.strip():
+            return redirect('/')
+        blog_list = Blog.query.filter(db.or_(Blog.title.like(f"%{keyword}%"), Blog.text.like(f"%{keyword}%"))).all()
+        pattern = f'[^<>]*{keyword}.*[^<>]'
+        blog_obj_list = []
+        for blog in blog_list:
+            # 通过正则表达式搜索匹配内容
+            text = re.search(pattern, blog.text, re.IGNORECASE)
+            if not text:
+                return render_template('search.html', err_msg='没有搜索内容')
+            html = text.group().replace(keyword, f'<span style="color:red">{keyword}</span>')
+            obj = {'blog': blog, 'keyword_centence': html}
+            blog_obj_list.append(obj)
+        return render_template('search.html', blog_list=blog_obj_list)
