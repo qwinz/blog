@@ -181,10 +181,10 @@ def password():
         flash('旧密码错误', 'password')
     return redirect(request.referrer)
 
-@index.route('/search', methods=['POST'])
+@index.route('/search')
 def search():
-    if request.method == 'POST':
-        keyword = request.form.get('keyword')
+    # if request.method == 'POST':
+        keyword = request.args.get('keyword')
         if not keyword.strip():
             return redirect('/')
         blog_list = Blog.query.filter(db.or_(Blog.title.like(f"%{keyword}%"), Blog.text.like(f"%{keyword}%"))).all()

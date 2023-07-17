@@ -1,20 +1,24 @@
 {% extends 'base.html' %}
 {% block title %}
-    搜索
+搜索
 {% endblock title %}
 {% block content %}
 <div class="main">
     <div class="layui-panel">
         {% if err_msg %}
-            没有搜索内容 
+        没有搜索内容
         {% endif %}
-        {% for blog in blog_list %}
         <div style="padding: 32px;">
-            <a href="/blog/blog_detail/{{blog.blog.id}}" class="layui-font-green layui-font-24" >标题：{{blog.blog.title}}</a>
-        <div style="padding: 10px 0 ;border-bottom: 1px solid #ccc;">搜索结果：{{blog.keyword_centence|safe}}</div>
+            {% for blog in blog_list %}
+            <div>
+                <a href="/blog/blog_detail/{{blog.blog.id}}"
+                    class="layui-font-green layui-font-24">标题：{{blog.blog.title}}</a>
+                <p style="padding: 10px 0 ;border-bottom: 1px solid #ccc;text-overflow: ellipsis;overflow: hidden;">
+                    搜索结果：{{blog.keyword_centence|safe}}</p>
+                    {% endfor %}
+            </div>
         </div>
-        {% endfor %}
-        
-      </div>
+
+    </div>
 </div>
 {% endblock content %}
