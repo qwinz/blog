@@ -23,4 +23,7 @@
 - `templates`：html模板文件
 - `view`：视图函数，路由逻辑处理
 - `app.py`：入口文件
+## 预览
+![image](https://github.com/qwinz/blog/assets/72587888/b3c74566-49b4-42c7-85d0-17bb4a42cceb)
+![image](https://github.com/qwinz/blog/assets/72587888/9f2c21a7-5928-4515-b9a5-2c093a788ff8)
 
