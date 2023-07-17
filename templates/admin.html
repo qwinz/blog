@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}
+后台管理
+{% endblock title %}
+{% block content %}
+<div class="main">
+  <div class="layui-card">
+    <div class="layui-card-header">用户管理</div>
+    <div class="layui-card-body">
+      <ul>
+        <table class="layui-table" lay-skin="line" lay-even>
+          <colgroup>
+            <col width="150">
+            <col width="150">
+            <col>
+          </colgroup>
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>账号</th>
+              <th>用户名</th>
+              <th>权限</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr>
+              <td>{{user.id}}</td>
+              <td class="username">{{user.username}}</span>
+              <td class="name">{{user.name}}</span>
+                <td>{{user.permission}}</td>
+              <td>
+                <span>
+                  {% if not user.active %}
+                  封号
+                  {% else %}
+                  可用
+                  {% endif %}
+                </span> |
+                <span>
+                  {% if user.is_silent %}
+                  禁言
+                  {% else %}
+                  未禁言
+                  {% endif %}
+                </span>
+              </td>
+              <td style="display: flex;justify-content: space-around;align-items: center;" >
+                {% if not user.active %}
+                <a href="/admin/user?user_id={{user.id}}&active=1"
+                  class="layui-btn layui-btn-sm layui-btn-radius">解封</a>
+                {% else %}
+                <a href="/admin/user?user_id={{user.id}}&active=0"
+                  class="layui-btn layui-btn-sm layui-btn-danger layui-btn-radius">封号</a>
+                {% endif %}
+                {% if not user.is_silent %}
+                <a href="/admin/user?user_id={{user.id}}&is_silent=1"
+                  class="layui-btn layui-btn-warm layui-btn-sm layui-btn-radius">禁言</a>
+                {% else %}
+                <a href="/admin/user?user_id={{user.id}}&is_silent=0"
+                  class="layui-btn layui-btn-sm layui-btn-radius">解禁</a>
+                {% endif %}
+                <a class="layui-btn layui-btn-xs" href="/admin/user?user_id={{user.id}}&permission=1">1级权限</a>
+                <a class="layui-btn layui-btn-xs" href="/admin/user?user_id={{user.id}}&permission=2">2</a>
+                <a class="layui-btn layui-btn-xs" href="/admin/user?user_id={{user.id}}&permission=3">3</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock content %}

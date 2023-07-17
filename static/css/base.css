@@ -26,6 +26,7 @@ pre{
     background-color: #fbfbfd;
 }
 pre code{
+    white-space: pre;
     display: block;
     max-height: 500px;
     overflow: scroll;

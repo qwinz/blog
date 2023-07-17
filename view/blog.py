@@ -17,9 +17,9 @@ def is_login():
 def get_blog_by_user(blog_id=None, is_all=False) -> blog:
     user = User.query.get(session['user_id'])
     if is_all:
-        blog = Blog.query.filter(Blog.user_id==user.id).order_by(Blog.create_time.desc()).all()
+        blog = Blog.query.filter(Blog.user_id==user.id, Blog.is_logic_delete==False).order_by(Blog.create_time.desc()).all()
     else:
-        blog = Blog.query.filter(Blog.id==blog_id, Blog.user_id==user.id).first()
+        blog = Blog.query.filter(Blog.id==blog_id, Blog.user_id==user.id, Blog.is_logic_delete==False).first()
     return blog
 
 @blog.route('/write', methods=['POST', 'GET'])
@@ -58,7 +58,7 @@ def write_blog(blog_id=None):
 @blog.route('/del_post/<int:blog_id>')
 def del_post(blog_id):
     blog = get_blog_by_user(blog_id)
-    db.session.delete(blog)
+    blog.is_logic_delete = True
     db.session.commit()
     db.session.close()
     return redirect(url_for('blog.blog_list'))
@@ -78,7 +78,6 @@ def blog_post(blog_id):
     db.session.close()
     return redirect(url_for('blog.blog_detail', blog_id=blog_id))
     
-
 @blog.route('/blog_edit/<int:blog_id>')
 def blog_edit(blog_id):
     return redirect(url_for('blog.write_blog', blog_id=blog_id))
@@ -109,6 +108,9 @@ def comment(blog_id=None):
     if user_id is not None:
         # 如果已登录，不使用uuid身份
         user = User.query.get(user_id)
+        if user.is_silent:
+            flash('您已被禁止评论')
+            return redirect(request.referrer)
         comment = Comment(text=text, user_id=user.id, blog_id=blog_id)
     else:
         comment = Comment(text=text, uuid=session.get('uuid'), blog_id=blog_id)

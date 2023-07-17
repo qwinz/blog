@@ -28,6 +28,7 @@ def blog_index_red():
 @index.route('/index', endpoint='index')
 @index.route('/index/<int:category_id>', endpoint='index')
 def blog_index(category_id=None):
+    from werkzeug.security import check_password_hash, generate_password_hash
     if session.get('uuid') is None: session['uuid'] = generate_uuid()
     if category_id is None :
         blog_list = Blog.query.filter(Blog.active==True).order_by(Blog.create_time.desc()).all()
@@ -48,6 +49,9 @@ def login():
         user = User.query.filter(User.username == username).first();
         if not user:
             flash('用户名不存在')
+            return redirect(url_for('index.login'))
+        if not user.active:
+            flash('该账号已封禁')
             return redirect(url_for('index.login'))
         if user.check_password(user.password, password):
             session.clear()
@@ -81,10 +85,10 @@ def register():
         # new_user.sef_password_hash()
         db.session.add(new_user)
         db.session.commit()
-        db.session.close()
         session.clear()
         set_session(new_user)
         g.user = new_user
+        db.session.close()
         return redirect(url_for('index.index'))
 
 @index.route('/logout')
@@ -100,7 +104,7 @@ def updatePwd():
 @index.route('/category', methods=['GET', 'POST'])
 def category():
     user = User.query.get(session['user_id'])
-    if user.permission > 1:
+    if user.permission > 2:
         return redirect('/')
     if request.method == 'GET':
         category_list = Category.query.all()
@@ -127,7 +131,6 @@ def category_list():
     blog_list = Blog.query.all()
     return render_template('category_list.html', blog_list=blog_list, category_list=category_list)
     
-
 @index.route('/user_info', methods=['GET', 'POST'])
 def user_info():
     if request.method == 'GET':
@@ -160,7 +163,7 @@ def user_info():
             session['user_name'] = user.name
             db.session.close()
             return redirect(request.url)
-            
+           
 @index.route('/password', methods=['POST'])
 def password():
     old_pwd = request.form.get('old_pwd').strip()

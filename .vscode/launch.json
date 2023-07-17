@@ -19,7 +19,7 @@
                 "--host",
                 "0.0.0.0",
                 "--no-debugger",
-                "--no-reload"
+                // "--no-reload"
             ],
             "jinja": true,
             "justMyCode": true

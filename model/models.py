@@ -8,10 +8,13 @@ class User(Base):
     username = db.Column(db.String(64), unique=True)
     password = db.Column(db.String(256), nullable=True)
     name = db.Column(db.String(64))
+    # 用户权限
     permission = db.Column(db.Integer, default=3)
-    avator = db.Column(db.String(256))
-
-
+    # 头像地址
+    avator = db.Column(db.String(256), default='/avator/default-avator-donot-use.png')
+    # 是否被禁言
+    is_silent = db.Column(db.Boolean, default=False)
+    
     def __init__(self, username, password, name):
         self.username = username
         self.password = password
@@ -28,6 +31,9 @@ class Blog(Base):
     __tablename__ = 'blog'
     title = db.Column(db.String(128))
     text = db.Column(db.TEXT)
+    read_num = db.Column(db.Integer)
+    # 是否逻辑删除
+    is_logic_delete = db.Column(db.Boolean, default=False)
     # 分类
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
     category = db.relationship('Category', backref='category')

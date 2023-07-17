@@ -28,24 +28,26 @@
             <!-- <li class="layui-nav-item"><a href="/about">关于</a></li> -->
         </div>
         <form style="margin-top: 10px;" action="/serarch" method="post">
-                <div class="layui-input-group">
-                  <input type="text" placeholder="搜索" class="layui-input">
-                  <div class="layui-input-split layui-input-suffix" style="cursor: pointer;background-color: #fff;">
-                    <button style="cursor: pointer;background-color: transparent;border: none;" type="submit"><i class="layui-icon layui-icon-search"></i></button>
-                  </div>
-              </div>
+            <div class="layui-input-wrap">
+                <input type="text" lay-affix="search" lay-filter="search" lay-options="{split: true}"
+                    placeholder="搜索…" class="layui-input">
+            </div>
         </form>
         <div style="margin-right: 7px;">
             {% if session['user_id'] %}
             <li class="layui-nav-item" lay-unselect style="float: right;">
                 <a href="javascript:;">
-                    <img src="{{ url_for('index.static', filename='images'+session['user_avator_path']) }}" class="layui-nav-img">
+                    <img src="{{ url_for('index.static', filename='images'+session['user_avator_path']) }}"
+                        class="layui-nav-img">
                     {{session['user_name']}}
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="/user_info">个人资料</a></dd>
                     <dd><a href="/blog/blog_list">我的文章</a></dd>
                     <dd><a href="/blog/comment">我的评论</a></dd>
+                    {% if session['user_permission'] <= 2 %}
+                        <dd><a href="/category">分类管理</a></dd>
+                    {% endif %}
                     <!-- <hr> -->
                     <dd><a href="/logout">退出</a></dd>
                 </dl>
@@ -54,7 +56,7 @@
             {% else %}
             <li class="layui-nav-item" style="float: right"><a href="/register">注册</a></li>
             <li class="layui-nav-item" style="float: right"><a href="/login">登录</a></li>
-            <li class="layui-nav-item" style="float: right; cursor: default;" title="{{session['uuid']}}" >uuid为默认身份</li>
+            <li class="layui-nav-item" style="float: right; cursor: default;" title="{{session['uuid']}}">uuid为默认身份</li>
             {% endif %}
         </div>
     </ul>
