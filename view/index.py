@@ -190,12 +190,15 @@ def search():
         blog_list = Blog.query.filter(db.or_(Blog.title.like(f"%{keyword}%"), Blog.text.like(f"%{keyword}%"))).all()
         pattern = f'[^<>]*{keyword}.*[^<>]'
         blog_obj_list = []
+        if not blog_list:
+            return render_template('search.html', err_msg='没有搜索内容')
         for blog in blog_list:
             # 通过正则表达式搜索匹配内容
             text = re.search(pattern, blog.text, re.IGNORECASE)
             if not text:
-                return render_template('search.html', err_msg='没有搜索内容')
-            html = text.group().replace(keyword, f'<span style="color:red">{keyword}</span>')
-            obj = {'blog': blog, 'keyword_centence': html}
+                obj = {'blog': blog, 'keyword_centence': ''}
+            else:
+                html = text.group().replace(keyword, f'<span style="color:red">{keyword}</span>')
+                obj = {'blog': blog, 'keyword_centence': html}
             blog_obj_list.append(obj)
         return render_template('search.html', blog_list=blog_obj_list)
