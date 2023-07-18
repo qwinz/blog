@@ -14,4 +14,3 @@ except ImportError:
     pass
 # SQLALCHEMY_DATABASE_URI = f'mysql+mysqlconnector://{DB_USER}:{DB_PWD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{DB_USER}:{DB_PWD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
-SQLALCHEMY_ECHO = True

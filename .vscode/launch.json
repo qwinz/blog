@@ -4,6 +4,7 @@
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+    
         {
             "name": "Python: Flask",
             "type": "python",
@@ -17,9 +18,9 @@
             "args": [
                 "run",
                 "--host",
-                "0.0.0.0",
+                "192.168.73.129",
                 "--no-debugger",
-                // "--no-reload"
+                "--no-reload"
             ],
             "jinja": true,
             "justMyCode": true

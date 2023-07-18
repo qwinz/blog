@@ -38,6 +38,7 @@
               </div>
             </div>
             <button class="layui-btn" type="submit">提交修改</button>
+            <span class="layui-fon-xs">(未生效请重新登陆)</span>
             <p class="tip" style="text-align: center;color: red;">
               {% with success_messages = get_flashed_messages(category_filter=["user_info"]) %}
                 {% if success_messages %}
@@ -94,7 +95,7 @@
     var uploadInst = upload.render({
       elem: '#ID-upload-demo-btn',
       size: 1024,
-      url: 'http://127.0.0.1:5000/user_info', // 此处用的是第三方的 http 请求演示，实际使用时改成您自己的上传接口即可。
+      url: 'https://77v036v609.yicp.fun/user_info', // 此处用的是第三方的 http 请求演示，实际使用时改成您自己的上传接口即可。
       before: function (obj) {
         // 预读本地文件示例，不支持ie8
         obj.preview(function (index, file, result) {

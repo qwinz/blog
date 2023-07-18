@@ -14,7 +14,7 @@ def set_session(user):
     # 转义图片路径，可能Linux中有所不同
     session['user_avator_path'] = user.avator
     session.permanent = True
-    
+
 @index.route('/generate_uuid')
 def generate_uuid():
     # 生成UUID
@@ -31,9 +31,9 @@ def blog_index(category_id=None):
     from werkzeug.security import check_password_hash, generate_password_hash
     if session.get('uuid') is None: session['uuid'] = generate_uuid()
     if category_id is None :
-        blog_list = Blog.query.filter(Blog.active==True).order_by(Blog.create_time.desc()).all()
+        blog_list = Blog.query.filter(Blog.active==True, Blog.is_logic_delete==False).order_by(Blog.create_time.desc()).all()
     else:
-        blog_list = Blog.query.filter(Blog.category_id==category_id).all()
+        blog_list = Blog.query.filter(Blog.category_id==category_id, Blog.active==True, Blog.is_logic_delete==False).all()
     return render_template('index.html', blog_list=blog_list)
 
 # 登录请求
@@ -127,8 +127,9 @@ def del_category(category_id):
 
 @index.route('/category_list')
 def category_list():
+    # blog_list = Blog.query.all()
+    blog_list = Blog.query.filter(Blog.active==True, Blog.is_logic_delete==False)
     category_list = Category.query.all()
-    blog_list = Blog.query.all()
     return render_template('category_list.html', blog_list=blog_list, category_list=category_list)
     
 @index.route('/user_info', methods=['GET', 'POST'])
