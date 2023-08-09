@@ -17,9 +17,11 @@ https://77v036v609.yicp.fun/index
     STATIC_IMAGE_PATH = path.join(path.join(path.dirname(path.dirname(path.abspath(__file__))), 'static'), 'images')
     ```
 4. 数据库迁移：
+    ```
     flask db init
     flask db migrate
     flask db upgrade
+    ```
 6. 执行app.py文件（.vscode文件可选）
 ## 模块介绍
 - `migrations`：sqlaichemy数据库迁移文件
