@@ -1,5 +1,5 @@
 ## 演示地址
-https://77v036v609.yicp.fun/index
+[https://77v036v609.yicp.fun/index](http://116.204.101.20:5000/index)
 ## 使用方法
 1. 安装依赖文件，进入`requirements.txt`文件的目录。
 2. 执行命令：`pip install -r requirements.txt`
